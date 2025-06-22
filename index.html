@@ -8,6 +8,7 @@
     <meta property="og:title" content="Nishant Pangare - Data Scientist Portfolio">
     <meta property="og:description" content="Data Science student at Saarland University, passionate about using data to solve real-world problems. Experienced in ML/DL, Python, and AI solutions.">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="./nishant-photo.jpeg" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -15,23 +16,6 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/framer-motion@11/dist/framer-motion.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'primary-dark': 'hsl(228, 84%, 5%)',
-              'secondary-dark': 'hsl(215, 28%, 17%)',
-              'accent-cyan': 'hsl(194, 100%, 50%)',
-              'accent-purple': 'hsl(258, 90%, 66%)',
-              'accent-pink': 'hsl(328, 86%, 70%)',
-              'accent-green': 'hsl(158, 64%, 52%)',
-              'accent-orange': 'hsl(43, 96%, 56%)'
-            }
-          }
-        }
-      }
-    </script>
     <style>
       .gradient-text {
         background: linear-gradient(135deg, hsl(194, 100%, 50%) 0%, hsl(258, 90%, 66%) 50%, hsl(328, 86%, 70%) 100%);
@@ -49,238 +33,29 @@
       }
       html { scroll-behavior: smooth; }
       body { font-family: 'Roboto', sans-serif; }
-      .typing-animation::after {
-        content: '|';
-        animation: blink 1s infinite;
-      }
-      @keyframes blink {
-        0%, 50% { opacity: 1; }
-        51%, 100% { opacity: 0; }
-      }
     </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary-dark': 'hsl(228, 84%, 5%)',
+              'secondary-dark': 'hsl(215, 28%, 17%)',
+              'accent-cyan': 'hsl(194, 100%, 50%)',
+              'accent-purple': 'hsl(258, 90%, 66%)',
+              'accent-pink': 'hsl(328, 86%, 70%)',
+              'accent-green': 'hsl(158, 64%, 52%)',
+              'accent-orange': 'hsl(43, 96%, 56%)'
+            }
+          }
+        }
+      }
+    </script>
   </head>
   <body class="bg-primary-dark text-gray-100 overflow-x-hidden">
-    <div id="root"></div>
-    
-    <script type="text/babel">
-      const { useState, useEffect } = React;
-      const { motion, AnimatePresence } = window.FramerMotion;
-
-      // Typing Text Component
-      function TypingText({ texts, speed = 100, deleteSpeed = 50, delayBetween = 2000 }) {
-        const [currentTextIndex, setCurrentTextIndex] = useState(0);
-        const [currentText, setCurrentText] = useState("");
-        const [isDeleting, setIsDeleting] = useState(false);
-
-        useEffect(() => {
-          const timeout = setTimeout(() => {
-            const fullText = texts[currentTextIndex];
-            
-            if (isDeleting) {
-              setCurrentText(prev => prev.slice(0, -1));
-            } else {
-              setCurrentText(fullText.slice(0, currentText.length + 1));
-            }
-
-            if (!isDeleting && currentText === fullText) {
-              setTimeout(() => setIsDeleting(true), delayBetween);
-            } else if (isDeleting && currentText === "") {
-              setIsDeleting(false);
-              setCurrentTextIndex((prev) => (prev + 1) % texts.length);
-            }
-          }, isDeleting ? deleteSpeed : speed);
-
-          return () => clearTimeout(timeout);
-        }, [currentText, isDeleting, currentTextIndex, texts, speed, deleteSpeed, delayBetween]);
-
-        return React.createElement('span', { className: 'typing-animation' }, currentText);
-      }
-
-      // Navbar Component
-      function Navbar() {
-        const [isScrolled, setIsScrolled] = useState(false);
-        const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-        const navItems = [
-          { href: "#home", label: "Home" },
-          { href: "#about", label: "About" },
-          { href: "#experience", label: "Experience" },
-          { href: "#skills", label: "Skills" },
-          { href: "#projects", label: "Projects" },
-          { href: "#contact", label: "Contact" },
-        ];
-
-        useEffect(() => {
-          const handleScroll = () => setIsScrolled(window.scrollY > 50);
-          window.addEventListener("scroll", handleScroll);
-          return () => window.removeEventListener("scroll", handleScroll);
-        }, []);
-
-        const scrollToSection = (href) => {
-          const element = document.querySelector(href);
-          if (element) element.scrollIntoView({ behavior: "smooth" });
-          setIsMobileMenuOpen(false);
-        };
-
-        return React.createElement(React.Fragment, null,
-          React.createElement(motion.nav, {
-            initial: { y: -100 },
-            animate: { y: 0 },
-            className: `fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "glass-morphism" : "bg-transparent"}`
-          },
-            React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" },
-              React.createElement('div', { className: "flex justify-between items-center py-4" },
-                React.createElement(motion.div, {
-                  whileHover: { scale: 1.05 },
-                  className: "font-bold text-xl gradient-text cursor-pointer",
-                  onClick: () => scrollToSection("#home")
-                }, "Nishant Pangare"),
-                React.createElement('div', { className: "hidden md:flex space-x-8" },
-                  navItems.map(item => 
-                    React.createElement(motion.button, {
-                      key: item.href,
-                      whileHover: { scale: 1.05 },
-                      whileTap: { scale: 0.95 },
-                      onClick: () => scrollToSection(item.href),
-                      className: "text-gray-100 hover:text-accent-cyan transition-colors duration-300"
-                    }, item.label)
-                  )
-                ),
-                React.createElement(motion.button, {
-                  whileTap: { scale: 0.95 },
-                  onClick: () => setIsMobileMenuOpen(true),
-                  className: "md:hidden text-2xl text-gray-100"
-                }, React.createElement('i', { className: "fas fa-bars" }))
-              )
-            )
-          )
-        );
-      }
-
-      // Hero Section Component
-      function HeroSection() {
-        const typingTexts = [
-          "Aspiring Data Scientist",
-          "Machine Learning Engineer", 
-          "AI Enthusiast",
-          "Problem Solver"
-        ];
-
-        const scrollToSection = (href) => {
-          const element = document.querySelector(href);
-          if (element) element.scrollIntoView({ behavior: "smooth" });
-        };
-
-        return React.createElement('section', {
-          id: "home",
-          className: "min-h-screen flex items-center justify-center hero-gradient relative overflow-hidden pt-20"
-        },
-          React.createElement('div', { className: "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10" },
-            React.createElement(motion.div, {
-              initial: { scale: 0, opacity: 0 },
-              animate: { scale: 1, opacity: 1 },
-              transition: { duration: 0.8, delay: 0.2 },
-              className: "mb-12 relative inline-block"
-            },
-              React.createElement('div', { className: "relative" },
-                React.createElement('img', {
-                  src: "./nishant-photo.jpeg",
-                  alt: "Nishant Pangare - Data Scientist",
-                  className: "w-56 h-56 rounded-full mx-auto shadow-2xl border-4 border-accent-cyan object-cover object-top scale-110",
-                  style: { objectPosition: '50% 20%' }
-                })
-              )
-            ),
-            React.createElement(motion.h1, {
-              initial: { y: 50, opacity: 0 },
-              animate: { y: 0, opacity: 1 },
-              transition: { duration: 0.8, delay: 0.4 },
-              className: "font-bold text-4xl md:text-6xl lg:text-7xl mb-6"
-            },
-              React.createElement('span', { className: "gradient-text" }, "Nishant Pangare")
-            ),
-            React.createElement(motion.div, {
-              initial: { y: 50, opacity: 0 },
-              animate: { y: 0, opacity: 1 },
-              transition: { duration: 0.8, delay: 0.6 },
-              className: "text-xl md:text-2xl lg:text-3xl mb-8 font-light text-gray-100"
-            },
-              React.createElement(TypingText, { texts: typingTexts })
-            ),
-            React.createElement(motion.p, {
-              initial: { y: 50, opacity: 0 },
-              animate: { y: 0, opacity: 1 },
-              transition: { duration: 0.8, delay: 0.8 },
-              className: "text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90 text-gray-300"
-            }, "MS in Data Science & AI at Saarland University | Turning Data into Insights | Building the Future with Machine Learning"),
-            React.createElement(motion.div, {
-              initial: { y: 50, opacity: 0 },
-              animate: { y: 0, opacity: 1 },
-              transition: { duration: 0.8, delay: 1.0 },
-              className: "flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6"
-            },
-              React.createElement(motion.button, {
-                whileHover: { scale: 1.05 },
-                whileTap: { scale: 0.95 },
-                onClick: () => scrollToSection("#projects"),
-                className: "bg-gradient-to-r from-accent-cyan to-accent-purple px-8 py-4 rounded-full font-semibold shadow-2xl text-white"
-              }, "View My Work"),
-              React.createElement(motion.button, {
-                whileHover: { scale: 1.05 },
-                whileTap: { scale: 0.95 },
-                onClick: () => scrollToSection("#contact"),
-                className: "border-2 border-accent-cyan px-8 py-4 rounded-full font-semibold hover:bg-accent-cyan hover:text-primary-dark transition-all duration-300 text-gray-100"
-              }, "Get In Touch")
-            ),
-            React.createElement(motion.div, {
-              initial: { y: 50, opacity: 0 },
-              animate: { y: 0, opacity: 1 },
-              transition: { duration: 0.8, delay: 1.2 },
-              className: "flex justify-center space-x-6 mt-12"
-            },
-              React.createElement('a', {
-                href: "https://linkedin.com/in/nishant-pangare",
-                target: "_blank",
-                rel: "noopener noreferrer",
-                className: "text-2xl text-gray-100 hover:text-accent-cyan transition-colors duration-300"
-              }, React.createElement('i', { className: "fab fa-linkedin" })),
-              React.createElement('a', {
-                href: "https://github.com/nishantpangare",
-                target: "_blank", 
-                rel: "noopener noreferrer",
-                className: "text-2xl text-gray-100 hover:text-accent-cyan transition-colors duration-300"
-              }, React.createElement('i', { className: "fab fa-github" })),
-              React.createElement('a', {
-                href: "https://www.youtube.com/@NISHANTVERSE22",
-                target: "_blank",
-                rel: "noopener noreferrer", 
-                className: "text-2xl text-gray-100 hover:text-accent-pink transition-colors duration-300"
-              }, React.createElement('i', { className: "fab fa-youtube" })),
-              React.createElement('a', {
-                href: "mailto:nishant.pangare22@gmail.com",
-                className: "text-2xl text-gray-100 hover:text-accent-cyan transition-colors duration-300"
-              }, React.createElement('i', { className: "fas fa-envelope" }))
-            )
-          )
-        );
-      }
-
-      // Main App Component
-      function App() {
-        return React.createElement('div', { className: "min-h-screen bg-primary-dark text-gray-100 overflow-x-hidden" },
-          React.createElement(Navbar),
-          React.createElement(HeroSection),
-          React.createElement('div', { className: "text-center py-20" },
-            React.createElement('h2', { className: "text-3xl font-bold mb-4" }, "Portfolio Coming Soon!"),
-            React.createElement('p', { className: "text-gray-300" }, "This is a simplified version for GitHub Pages. Full portfolio with all sections available in the Replit project.")
-          )
-        );
-      }
-
-      // Render the app
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(React.createElement(App));
-    </script>
-
+    <div class="text-center py-20">
+      <h1 class="text-4xl font-bold gradient-text">Nishant Pangare</h1>
+      <p class="mt-4 text-lg">Portfolio Coming Soon!</p>
+    </div>
   </body>
 </html>
